@@ -55,10 +55,18 @@ export class SelectorPageComponent implements OnInit {
           this.miFormulario.get('frontera')?.reset('');
           this.cargando = true;
         }),
-        switchMap(codigo => this.paisesService.getPaisPorCodigo(codigo)),
-        switchMap(pais => this.paisesService.getPaisesPorCodigos(pais.borders))
+        switchMap((codigo) => {
+          if (!codigo) {
+            this.cargando = false;
+            return [];
+          }
+          return this.paisesService.getPaisPorCodigo(codigo);
+        }),
+        switchMap((pais) =>
+          this.paisesService.getPaisesPorCodigos(pais.borders)
+        )
       )
-      .subscribe((paises) => { 
+      .subscribe((paises) => {
         this.fronteras = paises;
         this.cargando = false;
       });
