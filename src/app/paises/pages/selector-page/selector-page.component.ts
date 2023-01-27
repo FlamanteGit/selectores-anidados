@@ -24,7 +24,7 @@ export class SelectorPageComponent implements OnInit {
   constructor(private fb: FormBuilder, private paisesService: PaisesService) {}
 
   ngOnInit(): void {
-    this.regiones = this.paisesService.regiones;
+    this.regiones = this.paisesService.regiones.sort();
 
     this.miFormulario
       .get('region')
@@ -43,8 +43,9 @@ export class SelectorPageComponent implements OnInit {
         })
       )
       .subscribe((paises) => {
-        this.paises = paises;
+        this.paises = paises.sort((a, b) => (a.name.common > b.name.common) ? 1 : -1);
         this.cargando = false;
+        console.log(this.paises);
       });
 
     this.miFormulario
@@ -67,7 +68,7 @@ export class SelectorPageComponent implements OnInit {
         )
       )
       .subscribe((paises) => {
-        this.fronteras = paises;
+        this.fronteras = paises.sort((a, b) => (a.name.common > b.name.common) ? 1 : -1);
         this.cargando = false;
       });
   }
